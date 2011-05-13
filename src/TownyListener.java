@@ -161,7 +161,7 @@ public class TownyListener extends PluginListener {
 	
 	public void onArmSwing(Player player) {
 		if (towny.playerClaim.contains(player.getName())) {
-			towny.claimSingleTownBlock(player);
+			towny.claimSingleTownBlock(player, true);
 		}
 	}
 	

@@ -1135,15 +1135,21 @@ public class TownyThread extends Thread {
         else if (split[0].equalsIgnoreCase("/claim")) {
 			/*
 				/claim
+				/claim outpost
 				/claim remove
 				/claim toggle
 				/claim rect [town resident]
 			*/
 			if (split.length == 1) {
 				// /claim
-				claimSingleTownBlock(player);
+				claimSingleTownBlock(player, true);
 				return true;
 			} else if (split.length == 2) {
+				// /claim outpost
+				if (split[1].equalsIgnoreCase("outpost")) {
+					claimSingleTownBlock(player, false);
+					return true;
+				}
 				// /claim remove
 				if (split[1].equalsIgnoreCase("remove")) {
 					Resident mayor = world.residents.get(player.getName());
@@ -1309,6 +1315,7 @@ public class TownyThread extends Thread {
             
 			player.sendMessage(ChatTools.formatTitle("/claim"));
 			player.sendMessage("Mayor: /claim");
+			player.sendMessage("Mayor: /claim outpost");
 			player.sendMessage("Mayor: /claim remove");
 			player.sendMessage("Mayor: /claim toggle");
 			player.sendMessage("Mayor: /claim rect [town resident]");
@@ -1619,7 +1626,7 @@ public class TownyThread extends Thread {
 		return true;
 	}
 	
-	public void claimSingleTownBlock(Player player) {
+	public void claimSingleTownBlock(Player player, Boolean connected) {
 		Resident mayor = world.residents.get(player.getName());
 		if (mayor == null) { player.sendMessage(Colors.Rose + "You are not registered."); return; }
 		if (mayor.town == null) { player.sendMessage(Colors.Rose + "You don't belong to any town."); return; }
@@ -1633,9 +1640,11 @@ public class TownyThread extends Thread {
 		
 		long[] curTownBlock = TownyUtil.getTownBlock((long)player.getX(), (long)player.getZ());
 		
-		if (!isTownEdge(mayor.town, curTownBlock)) {
-			player.sendMessage(Colors.Rose + "This block is not connected to an edge of your town.");
-			return;
+		if(connected==true){
+			if (!isTownEdge(mayor.town, curTownBlock)) {
+				player.sendMessage(Colors.Rose + "This block is not connected to an edge of your town.");
+				return;
+			}
 		}
 			
 		if (claimTownBlock(mayor, curTownBlock)) {

@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WallGen {
@@ -10,23 +9,19 @@ public class WallGen {
 		WallBlock type:
 			0 = Wall
 			1 = Turret wall (3 enemy sides)
-			2 = Turret wall (1 enemy sides
+			2 = Turret wall (1 enemy sides)
 	*/
 	
 	public static boolean deleteTownWall(TownyWorld world, Town town) {
+		BlockQueue blockQueue = BlockQueue.getInstance();
 		//Delete old wall
-		ArrayList<TownBlock> townblocks = world.getTownBlocks(town);
+		//ArrayList<TownBlock> townblocks = world.getTownBlocks(town);
 		for (WallBlock wb : town.wall.sections) {
 			for (int z = 0; z < 4; z++) {
 				//for (int y = 0; y < town.wall.walkwayHeight+topSection-(int)wb.p.y; y++) {
 				for (int y = 0; y < town.wall.height+topSection; y++) {
 					for (int x = 0; x < 4; x++) {
-						for (int i=0;i<3;i++) { // 3 Tries
-							try {
-								if (etc.getServer().setBlockAt(0, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z))
-									break;
-							} catch (Exception e) {}
-						}
+						blockQueue.addWork(new Block(0, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z));
 					}
 				}
 			}
@@ -102,34 +97,34 @@ public class WallGen {
 	}
 	
 	public static void drawWallBlock(Wall wall, WallBlock wb) {
+		BlockQueue blockQueue = BlockQueue.getInstance();
 		// Even wall height
 		//int[][][] arr = getBuildArray(wall.blockType, wall.walkwayHeight-(int)wb.p.y, wb.t, wb.r);
 		
 		int[][][] arr = getBuildArray(wall.blockType, wall.height, wb.t, wb.r);
+		ArrayList<Block> addAfter = new ArrayList<Block>();
 		
 		for (int z = 0; z < 4; z++) {
 			for (int y = 0; y < arr.length; y++) { 
 				for (int x = 0; x < 4; x++) {
 					int bid = arr[y][x][z];
-					for (int i=0;i<3;i++) { // 3 Tries
-						try {
-							if (bid == 65) {
-								int ladderRot = 2;
-								if (wb.r == 0) ladderRot = 3;
-								else if (wb.r == 1) ladderRot = 4;
-								else if (wb.r == 2) ladderRot = 2;
-								else if (wb.r == 3) ladderRot = 5;
-								if (etc.getServer().setBlock(new Block(bid, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z, ladderRot)))
-									break;
-							} else {
-								if (etc.getServer().setBlock(new Block(bid, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z)))
-									break;
-							}
-						} catch (Exception e) {}
+
+					if (bid == 65) {
+						int ladderRot = 2;
+						if (wb.r == 0) ladderRot = 3;
+						else if (wb.r == 1) ladderRot = 4;
+						else if (wb.r == 2) ladderRot = 2;
+						else if (wb.r == 3) ladderRot = 5;
+						addAfter.add(new Block(bid, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z, ladderRot));
+					} else {
+						blockQueue.addWork(new Block(bid, (int)wb.p.x+x, (int)wb.p.y+y, (int)wb.p.z+z));
 					}
 				}
 			}
 		}
+		
+		for (Block block : addAfter)
+			blockQueue.addWork(block);
 	}
 	
 	public static Point lowestInGrid(long x, long z, int w, int h) {

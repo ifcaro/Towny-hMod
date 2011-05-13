@@ -1,11 +1,9 @@
 import java.util.*;
-import java.io.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Nation implements Comparable<Nation> {
     protected static final Logger log = Logger.getLogger("Minecraft");
-    private final String newLine = System.getProperty("line.separator");
+    //private final String newLine = System.getProperty("line.separator");
     public String name;
     public Town capital;
 	public ArrayList<Resident> assistants;
@@ -23,7 +21,7 @@ public class Nation implements Comparable<Nation> {
         activeResidents = 0;
     }
     
-    public boolean addTown(Town town) {
+    public synchronized boolean addTown(Town town) {
         if (!towns.contains(town)) {
             towns.add(town);
             town.nation = this;
@@ -33,7 +31,7 @@ public class Nation implements Comparable<Nation> {
         }
     }
     
-    public boolean remTown(Town town) {
+    public synchronized boolean remTown(Town town) {
         int index = towns.indexOf(town);
         if (index != -1) {
             towns.remove(index);
@@ -44,7 +42,7 @@ public class Nation implements Comparable<Nation> {
         }
     }
 	
-	public boolean addFriend(Nation nation) {
+	public synchronized boolean addFriend(Nation nation) {
         if (!friends.contains(nation)) {
             friends.add(nation);
             return true;
@@ -53,7 +51,7 @@ public class Nation implements Comparable<Nation> {
         }
     }
     
-    public boolean remFriend(Nation nation) {
+    public synchronized boolean remFriend(Nation nation) {
         int index = friends.indexOf(nation);
         if (index != -1) {
             friends.remove(index);
@@ -63,7 +61,7 @@ public class Nation implements Comparable<Nation> {
         }
     }
     
-    public boolean addEnemy(Nation nation) {
+    public synchronized boolean addEnemy(Nation nation) {
         if (!enemies.contains(nation)) {
             enemies.add(nation);
             return true;
@@ -72,7 +70,7 @@ public class Nation implements Comparable<Nation> {
         }
     }
     
-    public boolean remEnemy(Nation nation) {
+    public synchronized boolean remEnemy(Nation nation) {
         int index = enemies.indexOf(nation);
         if (index != -1) {
             enemies.remove(index);

@@ -1,5 +1,6 @@
 import java.util.*;
 
+@SuppressWarnings("hiding")
 public class CommandQueue<t> {
     LinkedList<Object> queue = new LinkedList<Object>();
     

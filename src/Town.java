@@ -1,22 +1,17 @@
 import java.util.*;
-import java.io.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Town implements Comparable<Town> {
     protected static final Logger log = Logger.getLogger("Minecraft");
-    private final String newLine = System.getProperty("line.separator");
-    public String name;
+    //private final String newLine = System.getProperty("line.separator");
+    public String name, townBoard;
     public Resident mayor;
-	public ArrayList<Resident> assistants;
-    public ArrayList<Resident> residents;
+	public ArrayList<Resident> assistants, residents;
 	public Wall wall;
-    public String townBoard;
     public Nation nation;
-    public int activeResidents;
-    public boolean isCapital;
+    public int activeResidents, bonusBlocks;
+    public boolean isCapital, pvp, mobs;
     public Region region;
-	public int bonusBlocks;
 	public TownBlock homeBlock;
 	
 	public int protectionStatus;
@@ -34,6 +29,8 @@ public class Town implements Comparable<Town> {
 		townBoard = "To change me, use: /town setboard [msg]";
 		protectionStatus = 3;
 		bonusBlocks = 0;
+		pvp = false;
+		mobs = false;
     }
 	
 	public ArrayList<Player> getOnlinePlayers() {
@@ -128,8 +125,8 @@ public class Town implements Comparable<Town> {
     public ArrayList<String> getStatus() {
         ArrayList<String> out = new ArrayList<String>();
         
-        // ___[ Racoon City ]___
-        out.add(ChatTools.formatTitle(toString()));
+        // ___[ Racoon City (PvP) ]___
+        out.add(ChatTools.formatTitle(toString() + (pvp ? Colors.Red+" (PvP)" : "")));
         
         // Lord: Mayor Quimby
         // Board: Get your fried chicken

@@ -1,11 +1,9 @@
 import java.util.*;
-import java.io.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TownyWorld {
     protected static final Logger log = Logger.getLogger("Minecraft");
-    private final String newLine = System.getProperty("line.separator");
+    //private final String newLine = System.getProperty("line.separator");
     private static volatile TownyWorld instance;
     public HashMap<String,Nation> nations;
     public HashMap<String,Town> towns;

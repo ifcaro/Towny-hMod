@@ -75,11 +75,11 @@ public class TownyListener extends PluginListener {
 			String key = posTownBlock[0]+","+posTownBlock[1];
 			TownBlock townblock = towny.world.townblocks.get(key);
 			if (townblock == null) return false;
-			log.info("Has townblock");
+			//log.info("Has townblock");
 			if (townblock.town == null) return false;
-			log.info("Has town");
+			//log.info("Has town");
 			if (!townblock.town.pvp) return true;
-			log.info("Has PVP Zone!");
+			//log.info("Has PVP Zone!");
 			
 			// Check Allies
 			if (!TownyProperties.friendlyfire) {

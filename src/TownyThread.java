@@ -20,7 +20,7 @@ public class TownyThread extends Thread {
 	public String[] zoneDeffinitions = {"Unclaimed", "Friendly", "Enemy", "Neutral", "Neutral-Public", "Neutral-Build Only"};
 	public HashMap<String, Integer> playerZone;
     // 0 = Unclaimed Zone Restrictions in effect.
-    // 1 = Belong to town / Is an ally / Owns plot
+    // 1 = Belong to town / Is an ally / Owns plot / Is friend
     // 2 = Enemy town
 	// 3 = Don't belong to town -> Protect town
 	// 4 = Don't belong to town -> Town is public (Build+Destroy)
